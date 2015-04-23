@@ -1,0 +1,25 @@
+{
+    "name": "redeye/stormpath-bundle",
+    "description": "A bundle for integrating Stormpath into Symfony",
+    "type": "symfony-bundle",
+    "require": {
+        "stormpath/sdk": "~1.0",
+        "symfony/framework-bundle": "~2.6",
+        "php": "~5.4"
+    },
+    "require-dev": {
+        "tedivm/stash": "0.12.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Redeye\\StashBundle\\": "",
+        }
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Redeye",
+            "email": "info@redeye.se"
+        }
+    ]
+}

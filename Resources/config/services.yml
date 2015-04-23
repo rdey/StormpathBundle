@@ -1,0 +1,32 @@
+services:
+    redeye_stormpath.client_builder:
+        class: Stormpath\ClientBuilder
+        public: false
+
+    redeye_stormpath.client:
+        class: Stormpath\Client
+        factory_service: redeye_stormpath.client_builder
+        factory_method: build
+
+    redeye_stormpath.tenant:
+        class: Stormpath\Resource\Tenant
+        factory_service: redeye_stormpath.client
+        factory_method: getCurrentTenant
+
+    redeye_stormpath.default_application.factory:
+        class: Redeye\StormpathBundle\ApplicationFinder
+        public: false
+
+    redeye_stormpath.default_application:
+        class: Stormpath\Resource\Application
+        factory_service: redeye_stormpath.default_application.factory
+        factory_method: getApplication
+        arguments:
+            - @redeye_stormpath.tenant
+            - %redeye_stormpath.default_application_name%
+
+    stormpath_tenant:
+        alias: redeye_stormpath.tenant
+
+    stormpath_application:
+        alias: redeye_stormpath.default_application
