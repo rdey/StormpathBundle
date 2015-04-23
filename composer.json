@@ -12,10 +12,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Redeye\\StashBundle\\": "",
+            "Redeye\\StashBundle\\": ""
         }
     },
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Redeye",
