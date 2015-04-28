@@ -42,6 +42,23 @@ services:
             - @redeye_stormpath.tenant
             - %redeye_stormpath.default_application_name%
 
+    redeye_stormpath.id_site.url_builder:
+        class: Redeye\StormpathBundle\IdSite\IdSiteUrlBuilder
+        arguments:
+            - @redeye_stormpath.api_key
+
+    redeye_stormpath.id_site.callback_validator:
+        class: Redeye\StormpathBundle\IdSite\IdSiteCallbackValidator
+        arguments:
+            - @redeye_stormpath.api_key
+            - ~
+
+    redeye_stormpath.id_site.token_store.stash:
+        class: Redeye\StormpathBundle\TokenStore\StashTokenStore
+        public: false
+        arguments:
+            - ~
+
     stormpath_tenant:
         alias: redeye_stormpath.tenant
 
