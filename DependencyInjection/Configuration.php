@@ -19,7 +19,16 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('api_key_file')->isRequired()->cannotBeEmpty()->end()
                     ->scalarNode('id_property_name')->defaultValue('apiKey.id')->cannotBeEmpty()->end()
                     ->scalarNode('secret_property_name')->defaultValue('apiKey.secret')->cannotBeEmpty()->end()
-                    ->scalarNode('cache_manager')->defaultValue('Array')->cannotBeEmpty()->end()
+                    ->scalarNode('cache_manager')
+                        ->defaultValue('array')
+                        ->cannotBeEmpty()
+                        ->beforeNormalization()
+                            ->ifTrue(function($v) {
+                                return in_array(strtolower($v), ['array', 'memcached', 'null', 'redis']);
+                            })
+                            ->then(function ($v) { return "Stormpath\\Cache\\".ucfirst($v)."CacheManager"; })
+                        ->end()
+                    ->end()
                     ->arrayNode('cache_manager_options')
                     ->children()
                         ->arrayNode('stash')

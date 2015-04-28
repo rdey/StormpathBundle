@@ -25,13 +25,18 @@ class RedeyeStormpathExtension extends Extension
             $config['client']['cache_manager_options']['stash']['pool'] = new Reference($config['client']['cache_manager_options']['stash']['pool_service']);
         }
 
-        $builder_def = $container->getDefinition('redeye_stormpath.client_builder');
-        $builder_def->addMethodCall('setApiKeyFileLocation', [$config['client']['api_key_file']]);
-        $builder_def->addMethodCall('setApiKeyIdPropertyName', [$config['client']['id_property_name']]);
-        $builder_def->addMethodCall('setApiKeySecretPropertyName', [$config['client']['secret_property_name']]);
-        $builder_def->addMethodCall('setCacheManager', [$config['client']['cache_manager']]);
-        $builder_def->addMethodCall('setCacheManagerOptions', [$config['client']['cache_manager_options']]);
+        $this->configureClient($config, $container);
 
         $container->setParameter('redeye_stormpath.default_application_name', $config['default_application']);
+        $container->setParameter('redeye_stormpath.api_key.id_property_name', $config['client']['id_property_name']);
+        $container->setParameter('redeye_stormpath.api_key.secret_property_name', $config['client']['secret_property_name']);
+        $container->setParameter('redeye_stormpath.api_key.api_key_file', $config['client']['api_key_file']);
+        $container->setParameter('redeye_stormpath.client.cache_manager_class', $config['client']['cache_manager']);
+    }
+
+    protected function configureClient($config, ContainerBuilder $container)
+    {
+        $factoryDef = $container->getDefinition('redeye_stormpath.client');
+        $factoryDef->replaceArgument(2, $config['client']['cache_manager_options']);
     }
 }

@@ -1,12 +1,29 @@
 services:
-    redeye_stormpath.client_builder:
-        class: Stormpath\ClientBuilder
+    redeye_stormpath.api_key_factory:
+        class: Redeye\StormpathBundle\Factory\ApiKeyFactory
+        public: false
+        arguments:
+            - %redeye_stormpath.api_key.id_property_name%
+            - %redeye_stormpath.api_key.secret_property_name%
+
+    redeye_stormpath.api_key:
+        class: Stormpath\ApiKey
+        public: false
+        factory: [@redeye_stormpath.api_key_factory, createFromFile]
+        arguments:
+            - %redeye_stormpath.api_key.api_key_file%
+
+    redeye_stormpath.client_factory:
+        class: Redeye\StormpathBundle\Factory\ClientFactory
         public: false
 
     redeye_stormpath.client:
         class: Stormpath\Client
-        factory_service: redeye_stormpath.client_builder
-        factory_method: build
+        factory: [@redeye_stormpath.client_factory, createClient]
+        arguments:
+            - @redeye_stormpath.api_key
+            - %redeye_stormpath.client.cache_manager_class%
+            - ~
 
     redeye_stormpath.tenant:
         class: Stormpath\Resource\Tenant
