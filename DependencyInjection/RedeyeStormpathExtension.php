@@ -20,6 +20,7 @@ class RedeyeStormpathExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('security.yml');
 
         if (isset($config['client']['cache_manager_options']['stash'])) {
             $config['client']['cache_manager_options']['stash']['pool'] = new Reference($config['client']['cache_manager_options']['stash']['pool_service']);

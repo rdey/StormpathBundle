@@ -5,8 +5,9 @@
     "require": {
         "stormpath/sdk": "~1.0",
         "symfony/framework-bundle": "~2.6",
+        "symfony/security-bundle": "~2.6",
         "firebase/php-jwt": "~2.0",
-        "php": "~5.4"
+        "php": "~5.5"
     },
     "require-dev": {
         "tedivm/stash": "0.12.*"

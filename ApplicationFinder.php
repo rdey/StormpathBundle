@@ -11,11 +11,11 @@ class ApplicationFinder
     {
         $apps = $tenant->applications;
         $apps->search = array('name' => $applicationName);
-        $application = $apps->getIterator()->current();
-
-        if (!$application) {
+        if (!$apps->getIterator()->valid()) {
             throw new ApplicationNotFoundException($applicationName);
         }
+
+        $application = $apps->getIterator()->current();
 
         return $application;
     }

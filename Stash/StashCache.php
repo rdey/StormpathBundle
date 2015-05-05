@@ -21,6 +21,10 @@ class StashCache implements Cache
      */
     public function get($key)
     {
+        if ($key == null) {
+            return null;
+        }
+
         $key = $this->normalizeId($key);
         $cache = $this->pool->getItem($key);
         $value = $cache->get();
@@ -38,6 +42,10 @@ class StashCache implements Cache
      */
     public function put($key, $value, $minutes)
     {
+        if ($key == null) {
+            return null;
+        }
+
         $key = $this->normalizeId($key);
         $item = $this->pool->getItem($key);
 
@@ -52,6 +60,10 @@ class StashCache implements Cache
      */
     public function delete($key)
     {
+        if ($key == null) {
+            return null;
+        }
+
         $key = $this->normalizeId($key);
         return $this->pool->clear($key);
     }

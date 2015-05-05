@@ -3,7 +3,7 @@
 namespace Redeye\StormpathBundle\IdSite;
 
 use JWT;
-use Stormpath\Application;
+use Stormpath\Resource\Application;
 use Stormpath\ApiKey;
 
 /**
@@ -36,6 +36,14 @@ class IdSiteUrlBuilder
             $data['state'] = (string)$state;
         }
 
-        return JWT::encode($data, $this->apiKey->getSecret());
+        $token = JWT::encode($data, $this->apiKey->getSecret());
+
+        $appUrl = $application->getHref();
+        $proto = parse_url($appUrl, PHP_URL_SCHEME);
+        $host = parse_url($appUrl, PHP_URL_HOST);
+        $base = $proto.'://'.$host;
+        $redirectUrl = $base.'/sso?jwtRequest='.$token;
+
+        return $redirectUrl;
     }
 }
