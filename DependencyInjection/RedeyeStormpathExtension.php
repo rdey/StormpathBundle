@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 
+use Stormpath\Resource\Tenant;
+
 /**
 * @author Magnus Nordlander
 */
@@ -26,6 +28,9 @@ class RedeyeStormpathExtension extends Extension
             $config['client']['cache_manager_options']['stash']['pool'] = new Reference($config['client']['cache_manager_options']['stash']['pool_service']);
         }
 
+        $this->configureTenant($config, $container);
+        $this->configureDefaultApplication($config, $container);
+
         $this->configureClient($config, $container);
         if (isset($config['token_store'])) {
             $tokenStoreRef = $this->configureTokenStore($config['token_store'], $container);
@@ -33,11 +38,37 @@ class RedeyeStormpathExtension extends Extension
             $callbackValidatorRef->replaceArgument(1, $tokenStoreRef);
         }
 
-        $container->setParameter('redeye_stormpath.default_application_name', $config['default_application']);
         $container->setParameter('redeye_stormpath.api_key.id_property_name', $config['client']['id_property_name']);
         $container->setParameter('redeye_stormpath.api_key.secret_property_name', $config['client']['secret_property_name']);
         $container->setParameter('redeye_stormpath.api_key.api_key_file', $config['client']['api_key_file']);
         $container->setParameter('redeye_stormpath.client.cache_manager_class', $config['client']['cache_manager']);
+    }
+
+    public function configureTenant($config, ContainerBuilder $container)
+    {
+        $def = $container->getDefinition('redeye_stormpath.tenant');
+
+        if (isset($config['tenant_href'])) {
+            $def->setFactory([new Reference('redeye_stormpath.data_store'), 'getResource']);
+            $def->setArguments([$config['tenant_href'], Tenant::class]);
+        } else {
+            $def->setFactory([new Reference('redeye_stormpath.client'), 'getCurrentTenant']);
+        }
+    }
+
+    public function configureDefaultApplication($config, ContainerBuilder $container)
+    {
+        $def = $container->getDefinition('redeye_stormpath.default_application');
+
+        if (isset($config['default_application_name'])) {
+            $def->setFactory([new Reference('redeye_stormpath.default_application.factory'), 'findApplicationNamed']);
+            $def->setArguments([$config['default_application_name']]);
+        } elseif (isset($config['default_application_href'])) {
+            $def->setFactory([new Reference('redeye_stormpath.default_application.factory'), 'findApplicationWithHref']);
+            $def->setArguments([$config['default_application_href']]);
+        } else {
+            throw new \LogicException("Application specifier not set");
+        }
     }
 
     protected function configureClient($config, ContainerBuilder $container)

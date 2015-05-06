@@ -4,6 +4,7 @@ namespace Redeye\StormpathBundle\User;
 
 use Stormpath\Resource\Account;
 use Stormpath\Resource\Application;
+use Stormpath\Resource\Expansion;
 use Stormpath\Client;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -23,11 +24,15 @@ class StormpathUserProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
+        $expansion = new Expansion();
+        $expansion->addProperty('groups');
+
         $iter = $this->application
             ->accounts
             ->setSearch([
                 'username' => $username
             ])
+            ->setExpansion($expansion)
             ->getIterator()
         ;
 
@@ -48,9 +53,12 @@ class StormpathUserProvider implements UserProviderInterface
 
         $href = $user->getAccountHref();
 
+        $expansion = new Expansion();
+        $expansion->addProperty('groups');
+
         $account = $this->client
             ->dataStore
-            ->getResource($href, \Stormpath\Stormpath::ACCOUNT);
+            ->getResource($href, \Stormpath\Stormpath::ACCOUNT, array('expand' => $expansion));
 
         if (!$account) {
             throw new \RuntimeException("Account not found when refreshing user.");

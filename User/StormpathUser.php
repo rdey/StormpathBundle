@@ -55,6 +55,11 @@ class StormpathUser implements UserInterface
         return $this->account->getUsername();
     }
 
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
+
     public function eraseCredentials()
     {
 

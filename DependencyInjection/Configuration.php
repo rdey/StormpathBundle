@@ -66,7 +66,15 @@ class Configuration implements ConfigurationInterface
                         })
                     ->end()
                 ->end()
-                ->scalarNode('default_application')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('tenant_href')->end()
+                ->scalarNode('default_application_name')->end()
+                ->scalarNode('default_application_href')->end()
+            ->end()
+            ->validate()
+                ->ifTrue(function($v) {
+                    return !isset($v['default_application_name']) && !isset($v['default_application_href']);
+                })
+                ->thenInvalid('Either default_application_name or default_application_href needs to be set.')
             ->end()
         ;
 
