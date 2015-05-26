@@ -64,6 +64,11 @@ services:
         public: false
         arguments:
             - ~
+    redeye_stormpath.resource_registry.group_href:
+        class: Redeye\StormpathBundle\Registry\ResourceHrefRegistry
+
+    redeye_stormpath.resource_registry.directory_href:
+        class: Redeye\StormpathBundle\Registry\ResourceHrefRegistry
 
     stormpath_tenant:
         alias: redeye_stormpath.tenant
