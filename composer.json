@@ -3,7 +3,7 @@
     "description": "A bundle for integrating Stormpath into Symfony",
     "type": "symfony-bundle",
     "require": {
-        "stormpath/sdk": "~1.0",
+        "stormpath/sdk": "dev-dev#1ff3a3600e",
         "symfony/framework-bundle": "~2.6",
         "symfony/security-bundle": "~2.6",
         "firebase/php-jwt": "~2.0",
