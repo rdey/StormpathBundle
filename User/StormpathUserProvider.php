@@ -30,7 +30,7 @@ class StormpathUserProvider implements UserProviderInterface
         $iter = $this->application
             ->accounts
             ->setSearch([
-                'username' => $username
+                'email' => $username,
             ])
             ->setExpansion($expansion)
             ->getIterator()
@@ -39,6 +39,7 @@ class StormpathUserProvider implements UserProviderInterface
         if (!$iter->valid()) {
             $e = new UsernameNotFoundException();
             $e->setUsername($username);
+
             throw $e;
         }
 
