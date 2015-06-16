@@ -25,7 +25,7 @@ class StormpathUserProvider implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         // Username is href
-        $account = $this->fetchAccount($username);)
+        $account = $this->fetchAccount($username);
 
         if (!$account) {
             $e = new UsernameNotFoundException();
