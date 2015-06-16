@@ -52,7 +52,7 @@ class StormpathUser implements UserInterface
 
     public function getUsername()
     {
-        return $this->account->getUsername();
+        return $this->accountHref;
     }
 
     public function __toString()

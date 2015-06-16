@@ -32,7 +32,7 @@ class StormpathUsernamePasswordAuthenticationProvider implements AuthenticationP
             throw new AuthenticationException($re->getMessage(), $re->getErrorCode(), $re);
         }
 
-        $user = $this->userProvider->loadUserByUsername($account->getUsername());
+        $user = $this->userProvider->loadUserByUsername($account->getHref());
 
         if (!$user instanceof StormpathUser) {
             throw new AuthenticationException('Stormpath Username Password authenticator can only handle Stormpath users');

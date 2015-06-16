@@ -24,26 +24,17 @@ class StormpathUserProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
-        $expansion = new Expansion();
-        $expansion->addProperty('groups');
+        // Username is href
+        $account = $this->fetchAccount($username);)
 
-        $iter = $this->application
-            ->accounts
-            ->setSearch([
-                'email' => $username,
-            ])
-            ->setExpansion($expansion)
-            ->getIterator()
-        ;
-
-        if (!$iter->valid()) {
+        if (!$account) {
             $e = new UsernameNotFoundException();
             $e->setUsername($username);
 
             throw $e;
         }
 
-        return new StormpathUser($iter->current(), $this->extractRoles($this->application));
+        return new StormpathUser($account, $this->extractRoles($this->application));
     }
 
     public function refreshUser(UserInterface $user)
@@ -54,12 +45,7 @@ class StormpathUserProvider implements UserProviderInterface
 
         $href = $user->getAccountHref();
 
-        $expansion = new Expansion();
-        $expansion->addProperty('groups');
-
-        $account = $this->client
-            ->dataStore
-            ->getResource($href, \Stormpath\Stormpath::ACCOUNT, array('expand' => $expansion));
+        $account = $this->fetchAccount($href);
 
         if (!$account) {
             throw new \RuntimeException("Account not found when refreshing user.");
@@ -73,6 +59,18 @@ class StormpathUserProvider implements UserProviderInterface
     public function supportsClass($class)
     {
         return $class === StormpathUser::class;
+    }
+
+    protected function fetchAccount($href)
+    {
+        $expansion = new Expansion();
+        $expansion->addProperty('groups');
+
+        $account = $this->client
+            ->dataStore
+            ->getResource($href, \Stormpath\Stormpath::ACCOUNT, array('expand' => $expansion));
+
+        return $account;
     }
 
     protected function extractRoles(Application $application)
