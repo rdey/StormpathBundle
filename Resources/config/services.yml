@@ -13,13 +13,25 @@ services:
         arguments:
             - %redeye_stormpath.api_key.api_key_file%
 
+    redeye_stormpath.guzzle_client:
+        alias: redeye_stormpath.guzzle_client.default
+
+    redeye_stormpath.guzzle_client.default:
+        class: Guzzle\Http\Client
+        tags:
+            - { name: playbloom_guzzle.client }
+
+    redeye_stormpath.request_executor:
+        class: Stormpath\Http\HttpClientRequestExecutor
+        public: false
+        arguments:
+            - @redeye_stormpath.guzzle_client
+
     redeye_stormpath.client_factory:
         class: Redeye\StormpathBundle\Factory\ClientFactory
         public: false
         arguments:
-            - @?logger
-            - @?playbloom_guzzle.client.plugin.logger
-            - @?playbloom_guzzle.client.plugin.profiler
+            - @redeye_stormpath.request_executor
 
     redeye_stormpath.client:
         class: Stormpath\Client

@@ -4,27 +4,18 @@ namespace Redeye\StormpathBundle\Factory;
 
 use Stormpath\Client;
 use Stormpath\ApiKey;
-use Stormpath\DataStore\DefaultDataStore;
-use Stormpath\Http\HttpClientRequestExecutor;
-
-use Guzzle\Common\HasDispatcherInterface;
-use Guzzle\Plugin\Log\LogPlugin;
-use Guzzle\Plugin\History\HistoryPlugin;
-use Psr\Log\LoggerInterface;
+use Stormpath\Http\RequestExecutor;
 
 /**
 * 
 */
 class ClientFactory
 {
-    protected $logPlugin;
-    protected $historyPlugin;
+    protected $requestExecutor;
 
-    public function __construct(LoggerInterface $logger = null, LogPlugin $logPlugin = null, HistoryPlugin $historyPlugin = null)
+    public function __construct(RequestExecutor $requestExecutor)
     {
-        $this->logger = $logger;
-        $this->logPlugin = $logPlugin;
-        $this->historyPlugin = $historyPlugin;
+        $this->requestExecutor = $requestExecutor;
     }
 
     public function createClient(ApiKey $apiKey, $cacheManagerClass, $cacheOptions = [])
@@ -34,43 +25,7 @@ class ClientFactory
             throw new \InvalidArgumentException("Cache manager class \"$cacheManagerClass\" does not exist.");
         }
 
-        $client = new Client($apiKey, $cacheManagerClass, $fullCacheOptions);
-
-        if ($this->logPlugin || $this->historyPlugin) {
-            try {
-                $requestExecutorRP = new \ReflectionProperty(DefaultDataStore::class, 'requestExecutor');
-                $httpClientRP = new \ReflectionProperty(HttpClientRequestExecutor::class, 'httpClient');
-
-                $requestExecutorRP->setAccessible(true);
-                $httpClientRP->setAccessible(true);
-
-                $dataStore = $client->getDataStore();
-                if (!$dataStore instanceOf DefaultDataStore) {
-                    throw new \RuntimeException("Expected datastore to be a DefaultDataStore, was ".get_class($dataStore));
-                }
-
-                $requestExecutor = $requestExecutorRP->getValue($dataStore);
-                if (!$requestExecutor instanceOf HttpClientRequestExecutor) {
-                    throw new \RuntimeException("Expected requestExecutor to be a HttpClientRequestExecutor, was ".get_class($requestExecutor));
-                }
-
-                $httpClient = $httpClientRP->getValue($requestExecutor);
-                if (!$httpClient instanceOf HasDispatcherInterface) {
-                    throw new \RuntimeException("Expected httpClient to implement HasDispatcherInterface, ".get_class($httpClient)." doesn't");
-                }
-
-                if ($this->logPlugin) {
-                    $httpClient->addSubscriber($this->logPlugin);
-                }
-                if ($this->historyPlugin) {
-                    $httpClient->addSubscriber($this->historyPlugin);
-                }
-            } catch (\Exception $e) {
-                if ($this->logger) {
-                    $this->logger->warning("Couldn't add logging and profiling to Stormpath. Probably due to version incompatibility. Skipping. Error message: ".$e->getMessage());
-                }
-            }
-        }
+        $client = new Client($apiKey, $cacheManagerClass, $fullCacheOptions, null, $this->requestExecutor);
 
         return $client;
     }
