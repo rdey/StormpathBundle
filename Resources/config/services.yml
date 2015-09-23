@@ -47,7 +47,6 @@ services:
     redeye_stormpath.default_application:
         class: Stormpath\Resource\Application
         factory: ~
-        lazy: true
 
     redeye_stormpath.id_site.url_builder:
         class: Redeye\StormpathBundle\IdSite\IdSiteUrlBuilder
