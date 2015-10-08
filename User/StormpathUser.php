@@ -86,14 +86,13 @@ class StormpathUser implements UserInterface
         $roles = [];
 
         foreach ($account->groups as $group) {
-
-            $customData = $group->customData;
+            $customData = $group->getCustomData();
             if ($customData->role) {
                 $roles[] = $customData->role;
             }
         }
 
-        $directoryCustomData = $account->directory->customData;
+        $directoryCustomData = $account->getDirectory()->getCustomData();
         if ($directoryCustomData->role) {
             $roles[] = $directoryCustomData->role;
         }
