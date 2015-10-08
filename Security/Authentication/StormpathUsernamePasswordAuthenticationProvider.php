@@ -27,7 +27,7 @@ class StormpathUsernamePasswordAuthenticationProvider implements AuthenticationP
     {
         try {
             $result = $this->application->authenticate($token->getUsername(), $token->getCredentials());
-            $account = $result->account;
+            $account = $result->getAccount();
         } catch (\Stormpath\Resource\ResourceError $re) {
             throw new AuthenticationException($re->getMessage(), $re->getErrorCode(), $re);
         }
