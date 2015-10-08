@@ -67,7 +67,7 @@ class StormpathUserProvider implements UserProviderInterface
         $expansion->addProperty('groups');
 
         $account = $this->client
-            ->dataStore
+            ->getDataStore()
             ->getResource($href, \Stormpath\Stormpath::ACCOUNT, array('expand' => $expansion));
 
         return $account;
@@ -77,7 +77,7 @@ class StormpathUserProvider implements UserProviderInterface
     {
         $roles = [];
 
-        $applicationCustomData = $application->customData;
+        $applicationCustomData = $application->getCustomData();
         if ($applicationCustomData->role) {
             $roles[] = $applicationCustomData->role;
         }

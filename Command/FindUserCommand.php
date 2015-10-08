@@ -22,7 +22,7 @@ class FindUserCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = $this->getContainer()->get('stormpath_application');
-        $list = $app->accounts->setSearch(['email' => $input->getArgument('email')]);
+        $list = $app->getAccounts()->setSearch(['email' => $input->getArgument('email')]);
         $account = $list->getIterator()->current();
 
         $table = new Table($output);

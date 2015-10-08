@@ -25,7 +25,7 @@ class ApplicationFinder
 
     public function findApplicationNamed($applicationName)
     {
-        $apps = $this->tenant->applications;
+        $apps = $this->tenant->getApplications();
         $apps->search = array('name' => $applicationName);
         if (!$apps->getIterator()->valid()) {
             throw new ApplicationNotFoundException($applicationName);
