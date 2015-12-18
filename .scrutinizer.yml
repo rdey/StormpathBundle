@@ -4,4 +4,4 @@ build:
             version: 5.6
     tests:
         override:
-            - bin/phpunit
+            - vendor/bin/phpunit
