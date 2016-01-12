@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
+use Redeye\StormpathBundle\Security\Authentication\StormpathUsernamePasswordAuthenticationProvider;
 
 class StormpathUsernamePasswordAuthenticationProvider implements AuthenticationProviderInterface
 {

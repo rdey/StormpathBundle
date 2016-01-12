@@ -20,6 +20,7 @@ class StormpathHttpBasicFactory implements SecurityFactoryInterface
         $provider = 'redeye_stormpath.stormpath.authentication.provider.usernamepassword.'.$id;
         $container
             ->setDefinition($provider, new DefinitionDecorator('redeye_stormpath.stormpath.authentication.provider.usernamepassword'))
+            ->replaceArgument(0, new Reference($config['application']))
             ->replaceArgument(1, new Reference($userProvider))
             ->replaceArgument(2, $id)
         ;
@@ -51,6 +52,7 @@ class StormpathHttpBasicFactory implements SecurityFactoryInterface
         $node
             ->children()
                 ->scalarNode('provider')->end()
+                ->scalarNode('application')->defaultValue('redeye_stormpath.default_application')->end()
                 ->scalarNode('realm')->defaultValue('Secured Area')->end()
             ->end()
         ;
