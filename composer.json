@@ -10,8 +10,11 @@
         "php": ">=5.5"
     },
     "require-dev": {
+        "symfony/symfony": "~2.6",
         "tedivm/stash": "0.12.*",
-        "playbloom/guzzle-bundle": "~1.0"
+        "playbloom/guzzle-bundle": "~1.0",
+        "phpunit/phpunit": "^5.0@dev",
+        "ocramius/proxy-manager": "~1.0"
     },
     "autoload": {
         "psr-4": {

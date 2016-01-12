@@ -36,6 +36,7 @@ services:
     redeye_stormpath.tenant:
         class: Stormpath\Resource\Tenant
         factory: ~
+        lazy: true
 
     redeye_stormpath.default_application.factory:
         class: Redeye\StormpathBundle\ApplicationFinder
