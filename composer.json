@@ -3,15 +3,14 @@
     "description": "A bundle for integrating Stormpath into Symfony",
     "type": "symfony-bundle",
     "require": {
-        "stormpath/sdk": "~1.0",
+        "stormpath/sdk": "dev-psr-6",
+        "psr/cache": "~1.0",
         "symfony/framework-bundle": "~2.6",
         "symfony/security-bundle": "~2.6",
-        "firebase/php-jwt": "~2.0",
         "php": ">=5.5"
     },
     "require-dev": {
         "symfony/symfony": "~2.6",
-        "tedivm/stash": "0.12.*",
         "playbloom/guzzle-bundle": "~1.0",
         "phpunit/phpunit": "^5.0@dev",
         "ocramius/proxy-manager": "~1.0"
