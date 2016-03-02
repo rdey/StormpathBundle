@@ -30,9 +30,6 @@ class ClientFactory
     public function createClient(ApiKey $apiKey, $cacheManagerClass, $cacheOptions = [])
     {
         $fullCacheOptions = $this->getFullCacheOptions($cacheOptions);
-        if (!class_exists($cacheManagerClass)) {
-            throw new \InvalidArgumentException("Cache manager class \"$cacheManagerClass\" does not exist.");
-        }
 
         $client = new Client($apiKey, $cacheManagerClass, $fullCacheOptions);
 

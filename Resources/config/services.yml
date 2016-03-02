@@ -50,22 +50,6 @@ services:
         factory: ~
         lazy: true
 
-    redeye_stormpath.id_site.url_builder:
-        class: Redeye\StormpathBundle\IdSite\IdSiteUrlBuilder
-        arguments:
-            - @redeye_stormpath.api_key
-
-    redeye_stormpath.id_site.callback_validator:
-        class: Redeye\StormpathBundle\IdSite\IdSiteCallbackValidator
-        arguments:
-            - @redeye_stormpath.api_key
-            - ~
-
-    redeye_stormpath.id_site.token_store.stash:
-        class: Redeye\StormpathBundle\TokenStore\StashTokenStore
-        public: false
-        arguments:
-            - ~
     redeye_stormpath.resource_registry.group_href:
         class: Redeye\StormpathBundle\Registry\ResourceHrefRegistry
 
