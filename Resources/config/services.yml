@@ -27,7 +27,7 @@ services:
         arguments:
             - @redeye_stormpath.api_key
             - %redeye_stormpath.client.cache_manager_class%
-            - ~
+            - []
 
     redeye_stormpath.data_store:
         class: Stormpath\DataStore\DataStore

@@ -81,9 +81,11 @@ class RedeyeStormpathExtension extends Extension
     {
         $factoryDef = $container->getDefinition('redeye_stormpath.client');
 
-        if ($config['client']['cache_service']) {
-            $factoryDef->replaceArgument(2, new Definition(PSR6InstanceCacheManager::class, new Reference($config['client']['cache_service'])));
-        } else {
+        if (isset($config['client']['cache_service'])) {
+            $factoryDef->replaceArgument(1, new Definition(PSR6InstanceCacheManager::class, [new Reference($config['client']['cache_service'])]));
+        }
+
+        if (isset($config['client']['cache_manager_options'])) {
             $factoryDef->replaceArgument(2, $config['client']['cache_manager_options']);
         }
     }
