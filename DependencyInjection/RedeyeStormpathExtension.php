@@ -7,8 +7,10 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Definition;
 
 use Stormpath\Resource\Tenant;
+use Stormpath\Cache\PSR6InstanceCacheManager;
 
 /**
 * @author Magnus Nordlander
@@ -80,8 +82,9 @@ class RedeyeStormpathExtension extends Extension
         $factoryDef = $container->getDefinition('redeye_stormpath.client');
 
         if ($config['client']['cache_service']) {
+            $factoryDef->replaceArgument(2, new Definition(PSR6InstanceCacheManager::class, new Reference($config['client']['cache_service'])));
+        } else {
             $factoryDef->replaceArgument(2, $config['client']['cache_manager_options']);
         }
-        $factoryDef->replaceArgument(2, $config['client']['cache_manager_options']);
     }
 }

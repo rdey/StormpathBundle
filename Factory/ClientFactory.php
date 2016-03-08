@@ -27,11 +27,11 @@ class ClientFactory
         $this->historyPlugin = $historyPlugin;
     }
 
-    public function createClient(ApiKey $apiKey, $cacheManagerClass, $cacheOptions = [])
+    public function createClient(ApiKey $apiKey, $cacheManager, $cacheOptions = [])
     {
         $fullCacheOptions = $this->getFullCacheOptions($cacheOptions);
 
-        $client = new Client($apiKey, $cacheManagerClass, $fullCacheOptions);
+        $client = new Client($apiKey, $cacheManager, $fullCacheOptions);
 
         if ($this->logPlugin || $this->historyPlugin) {
             try {
