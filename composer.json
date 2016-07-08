@@ -4,7 +4,7 @@
     "type": "symfony-bundle",
     "require": {
         "php": ">=5.5",
-        "stormpath/sdk": "dev-psr-6",
+        "stormpath/sdk": "~1.15",
         "psr/cache": "~1.0",
         "symfony/framework-bundle": "~2.6",
         "symfony/security-bundle": "~2.6"
