@@ -3,35 +3,26 @@ services:
         class: Redeye\StormpathBundle\Factory\ApiKeyFactory
         public: false
         arguments:
-            - %redeye_stormpath.api_key.id_property_name%
-            - %redeye_stormpath.api_key.secret_property_name%
+            - "%redeye_stormpath.api_key.id_property_name%"
+            - "%redeye_stormpath.api_key.secret_property_name%"
 
     redeye_stormpath.api_key:
         class: Stormpath\ApiKey
         public: false
-        factory: [@redeye_stormpath.api_key_factory, createFromFile]
+        factory: ["@redeye_stormpath.api_key_factory", createFromFile]
         arguments:
-            - %redeye_stormpath.api_key.api_key_file%
-
-    redeye_stormpath.client_factory:
-        class: Redeye\StormpathBundle\Factory\ClientFactory
-        public: false
-        arguments:
-            - @?logger
-            - @?playbloom_guzzle.client.plugin.logger
-            - @?playbloom_guzzle.client.plugin.profiler
+            - "%redeye_stormpath.api_key.api_key_file%"
 
     redeye_stormpath.client:
         class: Stormpath\Client
-        factory: [@redeye_stormpath.client_factory, createClient]
         arguments:
-            - @redeye_stormpath.api_key
-            - %redeye_stormpath.client.cache_manager_class%
-            - []
+            - "@redeye_stormpath.api_key"
+            - ~ # Cache Manager
+            - ~ # Cache options
 
     redeye_stormpath.data_store:
         class: Stormpath\DataStore\DataStore
-        factory: [@redeye_stormpath.client, getDataStore]
+        factory: ["@redeye_stormpath.client", getDataStore]
 
     redeye_stormpath.tenant:
         class: Stormpath\Resource\Tenant
@@ -42,8 +33,8 @@ services:
         class: Redeye\StormpathBundle\ApplicationFinder
         public: false
         arguments:
-            - @redeye_stormpath.data_store
-            - @redeye_stormpath.tenant
+            - "@redeye_stormpath.data_store"
+            - "@redeye_stormpath.tenant"
 
     redeye_stormpath.default_application:
         class: Stormpath\Resource\Application

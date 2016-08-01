@@ -2,8 +2,8 @@ services:
     redeye_stormpath.security.user_provider:
         class: Redeye\StormpathBundle\User\StormpathUserProvider
         arguments:
-            - @redeye_stormpath.client
-            - @redeye_stormpath.default_application
+            - "@redeye_stormpath.client"
+            - "@redeye_stormpath.default_application"
 
     redeye_stormpath.stormpath.authentication.provider.usernamepassword:
         class: Redeye\StormpathBundle\Security\Authentication\StormpathUsernamePasswordAuthenticationProvider
