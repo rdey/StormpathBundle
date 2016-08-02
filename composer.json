@@ -26,5 +26,10 @@
             "name": "Redeye",
             "email": "info@redeye.se"
         }
-    ]
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-dev": "2.0.x-dev"
+        }
+    }
 }
