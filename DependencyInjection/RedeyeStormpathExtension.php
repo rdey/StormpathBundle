@@ -97,7 +97,7 @@ class RedeyeStormpathExtension extends Extension
                 break;
 
             case 'service':
-                $factoryDef->replaceArgument(1, new Definition(PSR6InstanceCacheManager::class, [new Reference($config['service'])]));
+                $factoryDef->replaceArgument(1, new Definition(PSR6InstanceCacheManager::class, [new Reference($config['cache']['service'])]));
                 break;
 
             case 'null':
