@@ -3,17 +3,16 @@
     "description": "A bundle for integrating Stormpath into Symfony",
     "type": "symfony-bundle",
     "require": {
-        "stormpath/sdk": "~1.0",
+        "php": ">=5.5",
+        "stormpath/sdk": "~1.15",
+        "psr/cache": "~1.0",
         "symfony/framework-bundle": "~2.6",
-        "symfony/security-bundle": "~2.6",
-        "firebase/php-jwt": "~2.0",
-        "php": ">=5.5"
+        "symfony/security-bundle": "~2.6"
     },
     "require-dev": {
         "symfony/symfony": "~2.6",
-        "tedivm/stash": "0.12.*",
         "playbloom/guzzle-bundle": "~1.0",
-        "phpunit/phpunit": "^5.0@dev",
+        "phpunit/phpunit": "^5.0",
         "ocramius/proxy-manager": "~1.0"
     },
     "autoload": {
@@ -27,5 +26,10 @@
             "name": "Redeye",
             "email": "info@redeye.se"
         }
-    ]
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-dev": "2.0.x-dev"
+        }
+    }
 }

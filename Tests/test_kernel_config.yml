@@ -7,6 +7,4 @@ framework:
 redeye_stormpath:
     client:
         api_key_file: %kernel.root_dir%/stormpath.properties
-        cache_manager: 'null'
-        cache_manager_options: ~
     default_application_href: https://api.stormpath.com/v1/applications/abcdefghijk12345678901

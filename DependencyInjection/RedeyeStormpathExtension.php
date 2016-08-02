@@ -2,13 +2,19 @@
 
 namespace Redeye\StormpathBundle\DependencyInjection;
 
+use Stormpath\Cache\ArrayCacheManager;
+use Stormpath\Cache\MemcachedCacheManager;
+use Stormpath\Cache\NullCacheManager;
+use Stormpath\Cache\RedisCacheManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Definition;
 
 use Stormpath\Resource\Tenant;
+use Stormpath\Cache\PSR6InstanceCacheManager;
 
 /**
 * @author Magnus Nordlander
@@ -24,24 +30,14 @@ class RedeyeStormpathExtension extends Extension
         $loader->load('services.yml');
         $loader->load('security.yml');
 
-        if (isset($config['client']['cache_manager_options']['stash'])) {
-            $config['client']['cache_manager_options']['stash']['pool'] = new Reference($config['client']['cache_manager_options']['stash']['pool_service']);
-        }
-
         $this->configureTenant($config, $container);
         $this->configureDefaultApplication($config, $container);
 
         $this->configureClient($config, $container);
-        if (isset($config['token_store'])) {
-            $tokenStoreRef = $this->configureTokenStore($config['token_store'], $container);
-            $callbackValidatorRef = $container->getDefinition('redeye_stormpath.id_site.callback_validator');
-            $callbackValidatorRef->replaceArgument(1, $tokenStoreRef);
-        }
 
         $container->setParameter('redeye_stormpath.api_key.id_property_name', $config['client']['id_property_name']);
         $container->setParameter('redeye_stormpath.api_key.secret_property_name', $config['client']['secret_property_name']);
         $container->setParameter('redeye_stormpath.api_key.api_key_file', $config['client']['api_key_file']);
-        $container->setParameter('redeye_stormpath.client.cache_manager_class', $config['client']['cache_manager']);
 
         if (isset($config['resource_registries'])) {
             $groupHrefRegistryDefinition = $container->getDefinition('redeye_stormpath.resource_registry.group_href');
@@ -86,21 +82,29 @@ class RedeyeStormpathExtension extends Extension
     protected function configureClient($config, ContainerBuilder $container)
     {
         $factoryDef = $container->getDefinition('redeye_stormpath.client');
-        $factoryDef->replaceArgument(2, $config['client']['cache_manager_options']);
-    }
 
-    protected function configureTokenStore($config, ContainerBuilder $container)
-    {
-        switch ($config['type']) {
-            case 'stash':
-                $this->configureStashTokenStore($config['stash'], $container);
-                return new Reference('redeye_stormpath.id_site.token_store.stash');
+        switch ($config['cache']['type']) {
+            case 'memcached':
+                $factoryDef->replaceArgument(1, new Definition(MemcachedCacheManager::class));
+                break;
+
+            case 'redis':
+                $factoryDef->replaceArgument(1, new Definition(RedisCacheManager::class));
+                break;
+
+            case 'array':
+                $factoryDef->replaceArgument(1, new Definition(ArrayCacheManager::class));
+                break;
+
+            case 'service':
+                $factoryDef->replaceArgument(1, new Definition(PSR6InstanceCacheManager::class, [new Reference($config['cache']['service'])]));
+                break;
+
+            case 'null':
+                $factoryDef->replaceArgument(1, new Definition(NullCacheManager::class));
+                break;
         }
-    }
 
-    protected function configureStashTokenStore($config, ContainerBuilder $container)
-    {
-        $tsDef = $container->getDefinition('redeye_stormpath.id_site.token_store.stash');
-        $tsDef->replaceArgument(0, new Reference($config['pool_service']));
+        $factoryDef->replaceArgument(2, $config['cache']);
     }
 }
