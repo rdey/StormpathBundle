@@ -32,12 +32,8 @@ class RedeyeStormpathExtension extends Extension
 
         $this->configureTenant($config, $container);
         $this->configureDefaultApplication($config, $container);
-
         $this->configureClient($config, $container);
-
-        $container->setParameter('redeye_stormpath.api_key.id_property_name', $config['client']['id_property_name']);
-        $container->setParameter('redeye_stormpath.api_key.secret_property_name', $config['client']['secret_property_name']);
-        $container->setParameter('redeye_stormpath.api_key.api_key_file', $config['client']['api_key_file']);
+        $this->configureApiKey($config, $container);
 
         if (isset($config['resource_registries'])) {
             $groupHrefRegistryDefinition = $container->getDefinition('redeye_stormpath.resource_registry.group_href');
@@ -106,5 +102,33 @@ class RedeyeStormpathExtension extends Extension
         }
 
         $factoryDef->replaceArgument(2, $config['cache']);
+    }
+
+    protected function configureApiKeyFactory($config, ContainerBuilder $container)
+    {
+        $factoryDef = $container->getDefinition('redeye_stormpath.api_key_factory');
+
+        if (isset($config['client']['api_key_file']['id_property_name'])) {
+            $factoryDef->replaceArgument(0, $config['client']['api_key_file']['id_property_name']);
+        }
+        if (isset($config['client']['api_key_file']['secret_property_name'])) {
+            $factoryDef->replaceArgument(1, $config['client']['api_key_file']['secret_property_name']);
+        }
+    }
+
+    protected function configureApiKey($config, ContainerBuilder $container)
+    {
+        if (isset($config['client']['api_key_file']['path'])) {
+            $def = $container->getDefinition('redeye_stormpath.api_key.file');
+            $def->replaceArgument(0, $config['client']['api_key_file']['path']);
+
+            $container->setAlias('redeye_stormpath.api_key', 'redeye_stormpath.api_key.file');
+        } else {
+            $def = $container->getDefinition('redeye_stormpath.api_key.values');
+            $def->replaceArgument(0, $config['client']['api_key_id']);
+            $def->replaceArgument(1, $config['client']['api_key_secret']);
+
+            $container->setAlias('redeye_stormpath.api_key', 'redeye_stormpath.api_key.values');
+        }
     }
 }

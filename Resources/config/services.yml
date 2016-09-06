@@ -3,15 +3,22 @@ services:
         class: Redeye\StormpathBundle\Factory\ApiKeyFactory
         public: false
         arguments:
-            - "%redeye_stormpath.api_key.id_property_name%"
-            - "%redeye_stormpath.api_key.secret_property_name%"
+            - ~ # Id property name
+            - ~ # Secret property name
 
-    redeye_stormpath.api_key:
+    redeye_stormpath.api_key.file:
         class: Stormpath\ApiKey
         public: false
         factory: ["@redeye_stormpath.api_key_factory", createFromFile]
         arguments:
-            - "%redeye_stormpath.api_key.api_key_file%"
+            - ~ # Api key file path
+
+    redeye_stormpath.api_key.values:
+        class: Stormpath\ApiKey
+        public: false
+        arguments:
+            - ~ # Id
+            - ~ # Secret
 
     redeye_stormpath.client:
         class: Stormpath\Client
