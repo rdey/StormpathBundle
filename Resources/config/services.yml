@@ -15,6 +15,7 @@ services:
 
     redeye_stormpath.client:
         class: Stormpath\Client
+        factory: [Redeye\StormpathBundle\Factory\ClientFactory, "createClient"]
         arguments:
             - "@redeye_stormpath.api_key"
             - ~  # Cache Manager

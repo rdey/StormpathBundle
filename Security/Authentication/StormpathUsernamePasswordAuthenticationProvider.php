@@ -39,7 +39,13 @@ class StormpathUsernamePasswordAuthenticationProvider implements AuthenticationP
             throw new AuthenticationException('Stormpath Username Password authenticator can only handle Stormpath users');
         }
 
-        return new UsernamePasswordToken($user, $token->getCredentials(), $this->providerKey, $user->getRoles());
+        $token = new UsernamePasswordToken($user, $token->getCredentials(), $this->providerKey, $user->getRoles());
+
+        if (!$token->isAuthenticated()) {
+            throw new AuthenticationException('Stormpath authentication passed, but user has no roles.');
+        }
+
+        return $token;
     }
 
     public function supports(TokenInterface $token)

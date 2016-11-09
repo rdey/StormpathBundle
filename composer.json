@@ -6,11 +6,11 @@
         "php": ">=5.5",
         "stormpath/sdk": "~1.15",
         "psr/cache": "~1.0",
-        "symfony/framework-bundle": "~2.6",
-        "symfony/security-bundle": "~2.6"
+        "symfony/framework-bundle": "^2.6|^3.0",
+        "symfony/security-bundle": "^2.6|^3.0"
     },
     "require-dev": {
-        "symfony/symfony": "~2.6",
+        "symfony/symfony": "^2.6|^3.0",
         "playbloom/guzzle-bundle": "~1.0",
         "phpunit/phpunit": "^5.0",
         "ocramius/proxy-manager": "~1.0"
