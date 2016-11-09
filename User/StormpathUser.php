@@ -5,7 +5,7 @@ namespace Redeye\StormpathBundle\User;
 use Stormpath\Resource\Account;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class StormpathUser implements UserInterface
+class StormpathUser implements UserInterface, \Serializable
 {
     protected $account;
     protected $accountHref;
@@ -70,7 +70,7 @@ class StormpathUser implements UserInterface
      */
     public function serialize()
     {
-        return serialize(array($this->accountHref));
+        return serialize(array($this->accountHref, $this->roles, $this->additionalRoles));
     }
 
     /**
@@ -78,7 +78,7 @@ class StormpathUser implements UserInterface
      */
     public function unserialize($str)
     {
-        list($this->accountHref) = unserialize($str);
+        list($this->accountHref, $this->roles, $this->additionalRoles) = unserialize($str);
     }
 
     protected function extractRoles(Account $account)
