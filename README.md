@@ -40,18 +40,18 @@ Whereas this would be a more complete configuration:
 redeye_stormpath:
     client:
         api_key_file: %kernel.root_dir%/config/stormpath.properties
-        cache:
-            type: redis # or array, memcached, null, service
-            redis:
-                host: 127.0.0.1
-                port: 6379
-            memcached:
-            	- { host: 127.0.0.1, port: 11211, weight: 1 }
-            service: your_own_psr_6_cache
-            ttl: 60
-            tti: 120
-        tentant_href: https://api.stormpath.com/v1/tenants/123abc
-        default_application_href: https://api.stormpath.com/v1/applications/124abd
+    cache:
+        type: redis # or array, memcached, null, service
+        redis:
+            host: 127.0.0.1
+            port: 6379
+        memcached:
+        	- { host: 127.0.0.1, port: 11211, weight: 1 }
+        service: your_own_psr_6_cache
+        ttl: 60
+        tti: 120
+    tentant_href: https://api.stormpath.com/v1/tenants/123abc
+    default_application_href: https://api.stormpath.com/v1/applications/124abd
     resource_registries:
         groups:
             mygroup: https://api.stormpath.com/v1/groups/111aaa
