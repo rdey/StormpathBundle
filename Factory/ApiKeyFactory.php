@@ -39,4 +39,9 @@ class ApiKeyFactory
 
         return new ApiKey($id, $secret);
     }
+
+    public function createFromValues($id, $secret)
+    {
+        return new ApiKey($id, $secret);
+    }
 }

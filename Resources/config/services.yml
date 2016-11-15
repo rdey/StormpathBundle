@@ -9,9 +9,6 @@ services:
     redeye_stormpath.api_key:
         class: Stormpath\ApiKey
         public: false
-        factory: ["@redeye_stormpath.api_key_factory", createFromFile]
-        arguments:
-            - "%redeye_stormpath.api_key.api_key_file%"
 
     redeye_stormpath.client:
         class: Stormpath\Client
