@@ -37,7 +37,15 @@ class RedeyeStormpathExtension extends Extension
 
         $container->setParameter('redeye_stormpath.api_key.id_property_name', $config['client']['id_property_name']);
         $container->setParameter('redeye_stormpath.api_key.secret_property_name', $config['client']['secret_property_name']);
-        $container->setParameter('redeye_stormpath.api_key.api_key_file', $config['client']['api_key_file']);
+
+        $apiKey = $container->getDefinition('redeye_stormpath.api_key');
+        if (isset($config['client']['api_key_file'])) {
+            $apiKey->setFactory([new Reference('redeye_stormpath.api_key_factory'), 'createFromFile']);
+            $apiKey->setArguments([$config['client']['api_key_file']]);
+        } else {
+            $apiKey->setFactory([new Reference('redeye_stormpath.api_key_factory'), 'createFromValues']);
+            $apiKey->setArguments([$config['client']['id'], $config['client']['secret']]);
+        }
 
         if (isset($config['resource_registries'])) {
             $groupHrefRegistryDefinition = $container->getDefinition('redeye_stormpath.resource_registry.group_href');
